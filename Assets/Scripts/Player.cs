@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        m_Yaw = m_Camera.rotation.eulerAngles.y;
+        m_Pitch = m_Camera.rotation.eulerAngles.x;
     }
 
     private void Update()
@@ -29,7 +31,7 @@ public class Player : MonoBehaviour
         m_Rigidbody.velocity = moveVelocity * velocity;
 
         // Рыскание
-        m_Yaw = m_Yaw + m_XSensitivity * Input.GetAxis("Look Yaw");
+        m_Yaw = m_Yaw + m_XSensitivity * Input.GetAxis("Look Yaw") * Time.deltaTime;
         if(m_Yaw > 360)
         {
             m_Yaw -= 360;
@@ -39,7 +41,7 @@ public class Player : MonoBehaviour
             m_Yaw += 360;
         }
         // Тангаж
-        m_Pitch = Mathf.Clamp(m_Pitch - m_YSensitivity * Input.GetAxis("Look Pitch"), -90, 90);
+        m_Pitch = Mathf.Clamp(m_Pitch - m_YSensitivity * Input.GetAxis("Look Pitch") * Time.deltaTime, -90, 90);
 
         m_Camera.transform.rotation = Quaternion.AngleAxis(m_Yaw, Vector3.up) * Quaternion.AngleAxis(m_Pitch, Vector3.right);
     }
